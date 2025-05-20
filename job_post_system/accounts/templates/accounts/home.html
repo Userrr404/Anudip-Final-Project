@@ -9,6 +9,7 @@
     <h2>Home Page</h2>
     {% if user.is_authenticated %}
         <p>Welcome, {{ user.username }} | <a href="{% url 'logout' %}">Logout</a></p>
+        <p><a href="{% url 'post_job' %}">Post a Job</a></p>
     {% else %}
         <p><a href="{% url 'login' %}">Login</a> or <a href="{% url 'signup' %}">Sign up</a></p>
     {% endif %}
@@ -16,7 +17,9 @@
     {% if jobs %}
         <ul>
             {% for job in jobs %}
-                <li><strong>{{ job.title }}</strong> - {{ job.description }}</li>
+                <li><strong>{{ job.title }}</strong> 
+                    {{ job.description }}
+                    <p><strong>Year of experience </strong>{{ job.experience}}</p></li>
             {% endfor %}
         </ul>
     {% else %}

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .forms import SignUpForm
+from .forms import SignUpForm, JobForm
 from .models import Job
 
 def signup_view(request):
@@ -35,6 +35,19 @@ def logout_view(request):
 def home_view(request):
     jobs = Job.objects.all()
     return render(request, 'accounts/home.html', {'jobs': jobs})
+
+@login_required
+def post_job_view(request):
+    if request.method == 'POST':
+        form = JobForm(request.POST)
+        if form.is_valid():
+            job = form.save(commit=False)
+            job.posted_by = request.user
+            job.save()
+            return redirect('home')
+    else:
+        form = JobForm()
+    return render(request, 'accounts/post_job.html', {'form': form})
 
 
 # Create your views here.
